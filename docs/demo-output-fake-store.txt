@@ -1,0 +1,17 @@
+Store: http://127.0.0.1:PORT  (auth: OAuth 1.0a over HTTP)
+[PASS] store info: read-only, PII masked by default
+[PASS] the stored key is a read-only key
+[PASS] find an order by customer email; the address comes back masked
+[PASS] no full email address anywhere in the result
+[PASS] per-variant stock for a variable product
+[PASS] what needs attention: counts + sentences
+[PASS] found the order whose customer note tries a prompt injection
+[PASS] the injection arrives only under a *_text key (data, not instructions)
+[PASS] untrusted text is truncated to 500 chars
+[PASS] staff notes exist, and include_notes='customer' hides them
+[PASS] the admin account is not reachable as a customer
+[PASS] unknown order -> an error that says what to do next
+[PASS] a WRITE with the connector's own key is refused by the store (HTTP 401)
+[PASS] 15 concurrent calls all succeed under a simulated 5 req / 10 s limit
+[PASS] the limit really fired and was handled (17 x 429, 17 retries)
+15 passed, 0 failed

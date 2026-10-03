@@ -1,0 +1,62 @@
+# Dev-only WooCommerce store for end-to-end runs. Everything binds to 127.0.0.1. Never expose this to a network.
+name: woo-connector-dev
+
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wp
+      MARIADB_PASSWORD: wp
+      MARIADB_ROOT_PASSWORD: root
+    volumes: [db_data:/var/lib/mysql]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  wordpress:
+    image: wordpress:6-php8.3-apache
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+    ports: ["127.0.0.1:8080:80"]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    volumes:
+      - wp_data:/var/www/html
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins:ro # dev-only shims, see connector-dev-shims.php
+      - ./seed:/seed:ro
+
+  # WP-CLI, run through scripts/wp.sh. Shares the WordPress volume.
+  wpcli:
+    image: wordpress:cli-php8.3
+    profiles: ["tools"]
+    depends_on: [wordpress]
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+    volumes:
+      - wp_data:/var/www/html
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./seed:/seed:ro
+
+  # TLS in front of WordPress so the HTTPS + Basic auth path can be exercised (self-signed internal CA).
+  caddy:
+    image: caddy:2
+    depends_on: [wordpress]
+    command: caddy reverse-proxy --from https://localhost --to http://wordpress:80
+    ports: ["127.0.0.1:8443:443"]
+    volumes: [caddy_data:/data]
+
+volumes:
+  db_data:
+  wp_data:
+  caddy_data:

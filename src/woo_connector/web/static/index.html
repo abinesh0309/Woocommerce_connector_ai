@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Store desk</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <nav class="rail" aria-label="Sections">
+      <div class="brand">
+        <strong id="storeName">Store desk</strong>
+        <small id="storeMeta"></small>
+      </div>
+      <div class="navlist">
+        <button class="navbtn" data-view="overview">Overview</button>
+        <button class="navbtn" data-view="orders">Orders</button>
+        <button class="navbtn" data-view="stock">Stock</button>
+        <button class="navbtn" data-view="customers">Customers</button>
+      </div>
+      <div class="railfoot">
+        <p id="privacy" class="muted small"></p>
+        <button id="logout" class="linkbtn">Sign out</button>
+      </div>
+    </nav>
+
+    <main id="main" tabindex="-1">
+      <div id="banner"></div>
+      <div id="view"></div>
+    </main>
+
+    <aside class="ask" id="ask" aria-label="Assistant">
+      <header class="askhead">
+        <h2>Ask about your store</h2>
+        <button id="askClose" class="linkbtn askclose">Close</button>
+      </header>
+      <div id="log" class="log" role="log" aria-live="polite"></div>
+      <div id="chips" class="chips"></div>
+      <form id="askForm" class="askform">
+        <label for="askInput" class="sr">Your question</label>
+        <textarea id="askInput" rows="2" maxlength="2000" placeholder="Where is order 1042?"></textarea>
+        <button type="submit" class="primary" id="askSend">Ask</button>
+      </form>
+    </aside>
+  </div>
+
+  <button id="askOpen" class="askopen primary">Ask</button>
+
+  <div id="scrim" class="scrim" hidden></div>
+  <section id="drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
+    <header class="drawerhead">
+      <h2 id="drawerTitle"></h2>
+      <button id="drawerClose" class="linkbtn">Close</button>
+    </header>
+    <div id="drawerBody" class="drawerbody"></div>
+  </section>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

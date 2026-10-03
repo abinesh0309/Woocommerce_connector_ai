@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · Store desk</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="login-body">
+  <main class="login">
+    <h1>Store desk</h1>
+    <p class="muted">Read-only view of your WooCommerce store, with an assistant you can ask.</p>
+    <form id="loginForm" novalidate>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+      <p id="loginError" class="notice error" role="alert" hidden></p>
+      <button type="submit" class="primary">Sign in</button>
+    </form>
+  </main>
+  <script src="/static/login.js" defer></script>
+</body>
+</html>
